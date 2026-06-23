@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HeroSectionProps {
   title?: string;
@@ -21,6 +22,8 @@ const HeroSection = ({
   primaryButtonLink = "/auth",
   secondaryButtonLink = "/resources",
 }: HeroSectionProps) => {
+  const { user } = useAuth();
+
   return (
     <section className="relative py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,24 +37,27 @@ const HeroSection = ({
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-4">
-            <Link to={primaryButtonLink}>
-              <Button 
-                size="lg" 
-                className="rounded-full px-8 py-6 text-lg bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
-              >
-                {primaryButtonText}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link to={secondaryButtonLink}>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="rounded-full px-8 py-6 text-lg w-full sm:w-auto hover:bg-secondary/10"
-              >
-                {secondaryButtonText}
-              </Button>
-            </Link>
+            {!user ? (
+              <Link to={primaryButtonLink}>
+                <Button 
+                  size="lg" 
+                  className="rounded-full px-8 py-6 text-lg bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
+                >
+                  {primaryButtonText}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            ) : (
+              <Link to={secondaryButtonLink}>
+                <Button 
+                  size="lg" 
+                  className="rounded-full px-8 py-6 text-lg bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
+                >
+                  {secondaryButtonText}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

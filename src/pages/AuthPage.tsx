@@ -19,11 +19,9 @@ const loginSchema = z.object({
 
 const signupSchema = loginSchema;
 
-type LoginFormValues = z.infer<typeof loginSchema>;
-type SignupFormValues = z.infer<typeof signupSchema>;
 
 const AuthPage = () => {
-  const { signIn, signUp, user } = useAuth();
+  const { dummyLogin, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -54,46 +52,26 @@ const AuthPage = () => {
     },
   });
 
-  const onLoginSubmit = async (data: z.infer<typeof loginSchema>) => {
+  const onLoginSubmit = (data: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
-    try {
-      const response = await signIn(data.email, data.password);
-      if (response.error) throw response.error;
-      toast({
-        title: "Welcome back!",
-        description: "You've successfully logged in.",
-      });
-      navigate(from, { replace: true });
-    } catch (error: any) {
-      toast({
-        title: "Login failed",
-        description: error.message || "Please check your credentials and try again",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    dummyLogin(data.email);
+    toast({
+      title: "Welcome back!",
+      description: "You've successfully logged in.",
+    });
+    setIsLoading(false);
+    navigate(from, { replace: true });
   };
 
-  const onSignupSubmit = async (data: z.infer<typeof signupSchema>) => {
+  const onSignupSubmit = (data: z.infer<typeof signupSchema>) => {
     setIsLoading(true);
-    try {
-      const response = await signUp(data.email, data.password);
-      if (response.error) throw response.error;
-      toast({
-        title: "Account created",
-        description: "Please check your email to verify your account.",
-      });
-      setAuthMode("login");
-    } catch (error: any) {
-      toast({
-        title: "Signup failed",
-        description: error.message || "There was a problem creating your account",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    dummyLogin(data.email);
+    toast({
+      title: "Account created!",
+      description: "You've successfully signed up.",
+    });
+    setIsLoading(false);
+    navigate(from, { replace: true });
   };
 
   return (
